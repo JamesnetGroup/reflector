@@ -1,0 +1,27 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:units="clr-namespace:Reflector.LayoutSupport.UI.Units"
+    xmlns:ctrls="clr-namespace:Jamesnet.Wpf.Controls;assembly=Jamesnet.Wpf">
+
+    <Style TargetType="{x:Type units:ModernWindow}">
+        <Setter Property="Title" Value="Modern Window"/>
+        <Setter Property="Background" Value="#ffffff"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type units:ModernWindow}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <ctrls:JamesGrid Rows="Auto, *">
+                            <Border Background="#eeeeee" Padding="10">
+                                <TextBlock Text="Window Content"/>
+                            </Border>
+                            <ContentPresenter Grid.Row="1"/>
+                        </ctrls:JamesGrid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>
