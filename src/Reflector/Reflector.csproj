@@ -12,7 +12,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Reflector.Assemblies\Reflector.Assemblies.csproj" />
     <ProjectReference Include="..\Reflector.Forms\Reflector.Forms.csproj" />
+    <ProjectReference Include="..\Reflector.Types\Reflector.Types.csproj" />
   </ItemGroup>
 
 </Project>

@@ -3,9 +3,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ctrls="clr-namespace:Jamesnet.Wpf.Controls;assembly=Jamesnet.Wpf"
     xmlns:based="clr-namespace:Reflector.LayoutSupport.UI.Units;assembly=Reflector.LayoutSupport"
-    xmlns:units="clr-namespace:Reflector.Forms.UI.Units"
-    xmlns:cnvts="clr-namespace:Reflector.Forms.Local.Converters"
-    xmlns:model="clr-namespace:Reflector.Forms.Local.Models">
+    xmlns:units="clr-namespace:Reflector.Assemblies.UI.Units"
+    xmlns:cnvts="clr-namespace:Reflector.Assemblies.Local.Converters">
 
     <Geometry x:Key="MenuRight">M10,17L15,12L10,7V17Z</Geometry>
     <Geometry x:Key="MenuDown">M7,10L12,15L17,10H7Z</Geometry>
@@ -67,6 +66,7 @@
     </Style>
 
     <Style TargetType="{x:Type units:AssemblyListItem}">
+        <Setter Property="Click" Value="{Binding RelativeSource={RelativeSource AncestorType=ctrls:JamesContent}, Path=DataContext.AssemblyClickCommand}"/>
         <Setter Property="Background" Value="#191919"/>
         <Setter Property="Foreground" Value="#FFFFFF"/>
         <Setter Property="IsExpanded" Value="{Binding IsExpanded}"/>
@@ -80,12 +80,14 @@
                     <Border Background="{TemplateBinding Background}">
                         <ctrls:JamesGrid Rows="Auto, Auto">
                             <Border BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}">
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    ToolTip="{Binding Name}">
                                 <ctrls:JamesGrid Columns="Auto, Auto, *, Auto" 
                                                  Margin="{Binding RelativeSource={RelativeSource Self}, Converter={cnvts:TreeDepthConverter}}">
                                     <ToggleButton x:Name="extend" Style="{StaticResource ExpandButton}"/>
                                     <based:PathCanvas x:Name="path1" Style="{StaticResource TreeIcon}"/>
-                                    <TextBlock Grid.Column="2" Style="{StaticResource Header}"/>
+                                    <TextBlock Grid.Column="2" Style="{StaticResource Header}" 
+                                               TextTrimming="CharacterEllipsis"/>
                                 </ctrls:JamesGrid>
                             </Border>
                             <ItemsPresenter x:Name="items" Style="{StaticResource ItemsPresenter}"/>

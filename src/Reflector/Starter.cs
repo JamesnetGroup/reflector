@@ -1,10 +1,5 @@
 ﻿using Reflector.Properties;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Reflector
 {
@@ -15,6 +10,7 @@ namespace Reflector
         {
             _ = new App()
                 .AddWireDataContext<WireDataContext>()
+                .AddInversionModule<ViewModules>()
                 .Run();
         }
     }

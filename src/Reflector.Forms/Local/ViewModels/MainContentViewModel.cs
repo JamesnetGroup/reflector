@@ -1,49 +1,32 @@
-﻿using Jamesnet.Wpf.Mvvm;
-using Reflector.Forms.Local.Extensions;
-using Reflector.Forms.Local.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CommunityToolkit.Mvvm.Input;
+using Jamesnet.Wpf.Controls;
+using Jamesnet.Wpf.Mvvm;
+using Prism.Ioc;
+using Prism.Regions;
 
 namespace Reflector.Forms.Local.ViewModels
 {
-    public class MainContentViewModel : ObservableBase
+    public partial class MainContentViewModel : ObservableBase, IViewLoadable
     {
-        public List<TreeModel> Types { get; init; }
+        private readonly IRegionManager _regionManager;
+        private readonly IContainerExtension _containerExtension;
 
-        public MainContentViewModel()
+        public MainContentViewModel(IRegionManager regionManager, IContainerExtension containerExtension)
         {
-            Types = GetTypes();
+            _regionManager = regionManager;
+            _containerExtension = containerExtension;
         }
 
-        private static List<TreeModel> GetTypes()
+        public void OnLoaded(IViewable view)
         {
-            List<TreeModel> tree = new();
-            TreeFolderModel all = new("All");
-            TreeFolderModel dotnet = new("Systems");
+            IRegion region = _regionManager.Regions["AssemblyUnitRegion"];
+            IViewable typeUnit = _containerExtension.Resolve<IViewable>("AssemblyUnit");
 
-            List<Assembly> assems = AppDomain.CurrentDomain.GetAssemblies().ToList();
-
-            while (assems.Any())
+            if (!region.Views.Contains(typeUnit))
             {
-                Assembly assem = assems.First();
-                assems.Remove(assem);
-
-                all.Items.Add(new(assem));
-
-                if (assem.FullName.Contains("System."))
-                {
-                    dotnet.Items.Add(new(assem));
-                }
+                region.Add(typeUnit);
             }
-
-            tree.Add(all);
-            tree.Add(dotnet);
-
-            return tree;
+            region.Activate(typeUnit);
         }
     }
 }

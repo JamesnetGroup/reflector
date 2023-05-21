@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:units="clr-namespace:Reflector.Forms.UI.Units">
+    xmlns:units="clr-namespace:Reflector.Assemblies.UI.Units">
 
     <Style TargetType="{x:Type units:AssemblyList}">
         <Setter Property="BorderThickness" Value="0 0 0.51 0"/>
@@ -13,7 +13,7 @@
                     <Border Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}">
-                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ScrollViewer VerticalScrollBarVisibility="Hidden">
                             <ItemsPresenter/>
                         </ScrollViewer>
                     </Border>

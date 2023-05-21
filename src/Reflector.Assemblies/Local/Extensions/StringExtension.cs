@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Reflector.Forms.Local.Extensions
+﻿namespace Reflector.Assemblies.Local.Extensions
 {
     internal static class StringExtension
     {

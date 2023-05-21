@@ -2,8 +2,6 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/Reflector.Forms;component/Themes/Units/AssemblyListItem.xaml"/>
-        <ResourceDictionary Source="/Reflector.Forms;component/Themes/Units/AssemblyList.xaml"/>
         <ResourceDictionary Source="/Reflector.Forms;component/Themes/Views/MainContent.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

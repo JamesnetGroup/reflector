@@ -1,7 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
-namespace Reflector.Forms.UI.Units
+namespace Reflector.Assemblies.UI.Units
 {
     public class AssemblyList : TreeView
     {

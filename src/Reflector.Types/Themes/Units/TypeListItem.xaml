@@ -1,0 +1,110 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ctrls="clr-namespace:Jamesnet.Wpf.Controls;assembly=Jamesnet.Wpf"
+    xmlns:based="clr-namespace:Reflector.LayoutSupport.UI.Units;assembly=Reflector.LayoutSupport"
+    xmlns:units="clr-namespace:Reflector.Types.UI.Units"
+    xmlns:cnvts="clr-namespace:Reflector.Types.Local.Converters">
+
+    <Geometry x:Key="MenuRight">M10,17L15,12L10,7V17Z</Geometry>
+    <Geometry x:Key="MenuDown">M7,10L12,15L17,10H7Z</Geometry>
+    <Geometry x:Key="Assembly">M12,14C10.89,14 10,13.1 10,12C10,10.89 10.89,10 12,10C13.11,10 14,10.89 14,12A2,2 0 0,1 12,14M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4Z</Geometry>
+    <Geometry x:Key="Object">M18,15H16V17H18M18,11H16V13H18M20,19H12V17H14V15H12V13H14V11H12V9H20M10,7H8V5H10M10,11H8V9H10M10,15H8V13H10M10,19H8V17H10M6,7H4V5H6M6,11H4V9H6M6,15H4V13H6M6,19H4V17H6M12,7V3H2V21H22V7H12Z</Geometry>
+
+    <Style TargetType="{x:Type based:PathCanvas}" x:Key="ToggleIcon">
+        <Setter Property="Width" Value="16"/>
+        <Setter Property="Height" Value="16"/>
+        <Setter Property="Data" Value="{StaticResource MenuRight}"/>
+        <Setter Property="Fill" Value="#FFFFFF"/>
+    </Style>
+
+    <Style TargetType="{x:Type based:PathCanvas}" x:Key="TreeIcon">
+        <Setter Property="Grid.Row" Value="0"/>
+        <Setter Property="Grid.Column" Value="1"/>
+        <Setter Property="Width" Value="14"/>
+        <Setter Property="Height" Value="14"/>
+        <Setter Property="Margin" Value="0 0 4 0"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Data" Value="{StaticResource Object}"/>
+        <Setter Property="Fill" Value="#AAAAAA"/>
+    </Style>
+
+    <Style TargetType="{x:Type ItemsPresenter}" x:Key="ItemsPresenter">
+        <Setter Property="Grid.Row" Value="1"/>
+        <Setter Property="Visibility" Value="Collapsed"/>
+    </Style>
+
+    <Style TargetType="{x:Type TextBlock}" x:Key="Header">
+        <Setter Property="Grid.Row" Value="0"/>
+        <Setter Property="Grid.Column" Value="2"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0 0 10 0"/>
+        <Setter Property="Text" Value="{Binding Name}"/>
+    </Style>
+
+    <Style TargetType="{x:Type ToggleButton}" x:Key="ExpandButton">
+        <Setter Property="Grid.Row" Value="0"/>
+        <Setter Property="Grid.Column" Value="0"/>
+        <Setter Property="IsChecked" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsExpanded}"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Margin" Value="4 4 0 4"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Border Background="{TemplateBinding Background}">
+                        <based:PathCanvas x:Name="path1" Style="{StaticResource ToggleIcon}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="path1" Property="Data" Value="{StaticResource MenuDown}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type units:TypeListItem}">
+        <Setter Property="Background" Value="#191919"/>
+        <Setter Property="Foreground" Value="#FFFFFF"/>
+        <Setter Property="IsExpanded" Value="{Binding IsExpanded}"/>
+        <Setter Property="ItemsSource" Value="{Binding Items}"/>
+        <Setter Property="MinWidth" Value="200"/>
+        <Setter Property="BorderThickness" Value="0 0 0 0.51"/>
+        <Setter Property="BorderBrush" Value="#000000"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type units:TypeListItem}">
+                    <Border Background="{TemplateBinding Background}">
+                        <ctrls:JamesGrid Rows="Auto, Auto">
+                            <Border BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    ToolTip="{Binding Name}">
+                                <ctrls:JamesGrid Columns="Auto, Auto, *, Auto" 
+                                                 Margin="{Binding RelativeSource={RelativeSource Self}, Converter={cnvts:TreeDepthConverter}}">
+                                    <ToggleButton x:Name="extend" Style="{StaticResource ExpandButton}"/>
+                                    <based:PathCanvas x:Name="path1" Style="{StaticResource TreeIcon}"/>
+                                    <TextBlock Grid.Column="2" Style="{StaticResource Header}" 
+                                               TextTrimming="CharacterEllipsis"/>
+                                </ctrls:JamesGrid>
+                            </Border>
+                            <ItemsPresenter x:Name="items" Style="{StaticResource ItemsPresenter}"/>
+                        </ctrls:JamesGrid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsExpanded" Value="True">
+                            <Setter TargetName="items" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="#FF175295"/>
+                        </Trigger>
+                        <Trigger Property="HasItems" Value="False">
+                            <Setter TargetName="extend" Property="Visibility" Value="Hidden"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

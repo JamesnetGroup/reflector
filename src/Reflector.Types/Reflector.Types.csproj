@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <Nullable>disable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Reflector.Data\Reflector.Data.csproj" />
+    <ProjectReference Include="..\Reflector.LayoutSupport\Reflector.LayoutSupport.csproj" />
+  </ItemGroup>
+
+</Project>

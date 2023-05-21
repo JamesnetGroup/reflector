@@ -1,0 +1,10 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Reflector.Types;component/Themes/Units/TypeHeader.xaml"/>
+        <ResourceDictionary Source="/Reflector.Types;component/Themes/Units/TypeListItem.xaml"/>
+        <ResourceDictionary Source="/Reflector.Types;component/Themes/Units/TypeList.xaml"/>
+        <ResourceDictionary Source="/Reflector.Types;component/Themes/Views/TypesUnit.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>

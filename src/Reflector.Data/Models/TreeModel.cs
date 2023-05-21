@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media;
-using System.Xml.Linq;
 
-namespace Reflector.Forms.Local.Models
+namespace Reflector.Data.Models
 {
     public class TreeModel
     {

@@ -1,12 +1,10 @@
-﻿using Jamesnet.Wpf.Controls;
-using Jamesnet.Wpf.Global.Location;
+﻿using Jamesnet.Wpf.Global.Location;
+using Reflector.Assemblies.Local.ViewModels;
+using Reflector.Assemblies.UI.Views;
 using Reflector.Forms.Local.ViewModels;
 using Reflector.Forms.UI.Views;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Reflector.Types.Local.ViewModels;
+using Reflector.Types.UI.Views;
 
 namespace Reflector.Properties
 {
@@ -15,6 +13,8 @@ namespace Reflector.Properties
         protected override void Match(ViewModelLocatorCollection items)
         {
             items.Register<MainContent, MainContentViewModel>();
+            items.Register<TypesUnit, TypesUnitViewModel>();
+            items.Register<AssemblyUnit, AssemblyUnitViewModel>();
         }
     }
 }
