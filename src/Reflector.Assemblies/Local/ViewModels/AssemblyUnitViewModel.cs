@@ -1,6 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Jamesnet.Wpf.Global.Evemt;
 using Jamesnet.Wpf.Mvvm;
+using Reflector.Core.Reflection;
+using Reflector.Data.Arguments;
+using Reflector.Data.Events;
 using Reflector.Data.Models;
 using System;
 using System.Collections.Generic;
@@ -13,13 +17,13 @@ namespace Reflector.Assemblies.Local.ViewModels
     {
         [ObservableProperty]
         private TreeModel _currentAssembly;
-        [ObservableProperty]
-        public List<AssemInfo> _assemblyInfo;
+        private readonly IEventHub _eventHub;
 
         public List<TreeModel> Assemblies { get; init; }
 
-        public AssemblyUnitViewModel()
+        public AssemblyUnitViewModel(IEventHub eventHub)
         {
+            _eventHub = eventHub;
             Assemblies = GetTypes();
         }
 
@@ -56,50 +60,11 @@ namespace Reflector.Assemblies.Local.ViewModels
             CurrentAssembly = data;
             if (data.Assem != null)
             {
-                AssemblyInfo = GetAssemblyInfo(data.Assem);
+                CurrentTypePubArgs args = new();
+                args.Assembly = data.Assem;
+
+                _eventHub.Publish<CurrentTypePubHandler, CurrentTypePubArgs>(args);                
             }
-        }
-
-        private List<AssemInfo> GetAssemblyInfo(Assembly assembly)
-        {
-            List<AssemInfo> assemblyInfoList = new List<AssemInfo>();
-
-            // List all the types (classes, interfaces, enums, etc.)
-            foreach (var type in assembly.GetTypes())
-            {
-                AssemInfo assemInfo = new AssemInfo
-                {
-                    TypeName = type.FullName,
-                    IsClass = type.IsClass,
-                    IsPublic = type.IsPublic,
-                    IsPrivate = !type.IsPublic && !type.IsNotPublic, // Non-public (internal types might also be included here)
-                    IsAbstract = type.IsAbstract,
-                    IsSealed = type.IsSealed,
-                    IsInterface = type.IsInterface
-                };
-
-                // List all the methods for each type
-                foreach (var method in type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static))
-                {
-                    assemInfo.Methods.Add(method.Name);
-                }
-
-                // List all the properties for each type
-                foreach (var prop in type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static))
-                {
-                    assemInfo.Properties.Add(prop.Name);
-                }
-
-                // List all the fields for each type
-                foreach (var field in type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static))
-                {
-                    assemInfo.Fields.Add(field.Name);
-                }
-
-                assemblyInfoList.Add(assemInfo);
-            }
-
-            return assemblyInfoList;
         }
     }
 

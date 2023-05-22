@@ -12,7 +12,7 @@
                     <Border Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}">
-                        <units:TypeList ItemsSource="{Binding Types}"/>
+                        <units:TypeList ItemsSource="{Binding TypeDetails}"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

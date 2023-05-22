@@ -2,12 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0-windows</TargetFramework>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Events\" />
+    <PackageReference Include="Jamesnet.Wpf" Version="1.0.0.10" />
   </ItemGroup>
 
 </Project>

@@ -13,8 +13,9 @@
                     <Border Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}">
-                        <james:JamesGrid Rows="*" Columns="Auto, *">
+                        <james:JamesGrid Rows="*" Columns="Auto, Auto, *">
                             <james:JamesRegion RegionName="AssemblyUnitRegion"/>
+                            <james:JamesRegion RegionName="TypesUnitRegion"/>
                         </james:JamesGrid>
                     </Border>
                 </ControlTemplate>

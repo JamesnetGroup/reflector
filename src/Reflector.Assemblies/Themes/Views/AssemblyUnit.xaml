@@ -15,9 +15,6 @@
                             BorderThickness="{TemplateBinding BorderThickness}">
                         <james:JamesGrid Rows="*" Columns="Auto, Auto, Auto">
                             <units:AssemblyList ItemsSource="{Binding Assemblies}"/>
-                            <TextBlock Text="{Binding CurrentAssembly.Name}"
-                                       Foreground="#FFFFFF"/>
-                            <ListBox ItemsSource="{Binding AssemblyInfo}" DisplayMemberPath="TypeName"/>
                         </james:JamesGrid>
                     </Border>
                 </ControlTemplate>

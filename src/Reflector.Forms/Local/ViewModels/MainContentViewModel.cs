@@ -3,6 +3,7 @@ using Jamesnet.Wpf.Controls;
 using Jamesnet.Wpf.Mvvm;
 using Prism.Ioc;
 using Prism.Regions;
+using System;
 
 namespace Reflector.Forms.Local.ViewModels
 {
@@ -19,14 +20,20 @@ namespace Reflector.Forms.Local.ViewModels
 
         public void OnLoaded(IViewable view)
         {
-            IRegion region = _regionManager.Regions["AssemblyUnitRegion"];
-            IViewable typeUnit = _containerExtension.Resolve<IViewable>("AssemblyUnit");
+            SwitchRegion("AssemblyUnitRegion", "AssemblyUnit");
+            SwitchRegion("TypesUnitRegion", "TypesUnit");
+        }
 
-            if (!region.Views.Contains(typeUnit))
+        private void SwitchRegion(string regionName, string viewName)
+        {
+            IRegion region = _regionManager.Regions[regionName];
+            IViewable view = _containerExtension.Resolve<IViewable>(viewName);
+
+            if (!region.Views.Contains(view))
             {
-                region.Add(typeUnit);
+                region.Add(view);
             }
-            region.Activate(typeUnit);
+            region.Activate(view);
         }
     }
 }

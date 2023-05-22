@@ -1,6 +1,10 @@
-﻿using Jamesnet.Wpf.Controls;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Jamesnet.Wpf.Controls;
 using Jamesnet.Wpf.Global.Evemt;
 using Jamesnet.Wpf.Mvvm;
+using Reflector.Core.Reflection;
+using Reflector.Data.Arguments;
+using Reflector.Data.Events;
 using Reflector.Data.Models;
 using System;
 using System.Collections.Generic;
@@ -9,46 +13,28 @@ using System.Reflection;
 
 namespace Reflector.Types.Local.ViewModels
 {
-    public class TypesUnitViewModel : ObservableBase, IViewLoadable
+    public partial class TypesUnitViewModel : ObservableBase, IViewLoadable
     {
-        private readonly IEventHub _hub;
+        private readonly IEventHub _eventHub;
+
+        [ObservableProperty]
+        public List<NamespaceNode> _typeDetails;
 
         public List<TreeModel> Types { get; init; }
 
-        public TypesUnitViewModel(IEventHub hub)
+        public TypesUnitViewModel(IEventHub eventHub)
         {
-            _hub = hub;
+            _eventHub = eventHub;
         }
 
         public void OnLoaded(IViewable view)
         {
+            _eventHub.Subscribe<CurrentTypePubHandler, CurrentTypePubArgs>(CurrentTypeChanged);
         }
 
-        private static List<TreeModel> GetTypes()
+        private void CurrentTypeChanged(CurrentTypePubArgs args)
         {
-            List<TreeModel> tree = new();
-            TreeFolderModel all = new("All");
-            TreeFolderModel dotnet = new("Systems");
-
-            List<Assembly> assems = AppDomain.CurrentDomain.GetAssemblies().ToList();
-
-            while (assems.Any())
-            {
-                Assembly assem = assems.First();
-                assems.Remove(assem);
-
-                all.Items.Add(new(assem));
-
-                if (assem.FullName.Contains("System."))
-                {
-                    dotnet.Items.Add(new(assem));
-                }
-            }
-
-            tree.Add(all);
-            tree.Add(dotnet);
-
-            return tree;
+            TypeDetails = AssemblyInspector.CreateHierarchy(args.Assembly);
         }
     }
 }
