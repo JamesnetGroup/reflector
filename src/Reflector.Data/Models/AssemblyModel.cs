@@ -3,13 +3,13 @@ using System.Reflection;
 
 namespace Reflector.Data.Models
 {
-    public class TreeModel
+    public class AssemblyModel
     {
         public string Name { get; set; }
         public Assembly Assem { get; set; }
-        public List<TreeModel> Items { get; set; } = new();
+        public List<AssemblyModel> Items { get; set; } = new();
 
-        public TreeModel(Assembly assem)
+        public AssemblyModel(Assembly assem)
         {
             if (assem == null)
                 return;

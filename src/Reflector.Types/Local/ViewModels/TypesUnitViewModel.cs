@@ -3,10 +3,9 @@ using CommunityToolkit.Mvvm.Input;
 using Jamesnet.Wpf.Controls;
 using Jamesnet.Wpf.Global.Evemt;
 using Jamesnet.Wpf.Mvvm;
-using Reflector.Core.Reflection;
-using Reflector.Data.Arguments;
-using Reflector.Data.Events;
+using Reflector.Core.Utilities;
 using Reflector.Data.Models;
+using Reflector.Data.Services;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,27 +14,27 @@ namespace Reflector.Types.Local.ViewModels
     public partial class TypesUnitViewModel : ObservableBase, IViewLoadable
     {
         private readonly IEventHub _eventHub;
-        private readonly AssemblyManager _assemblyManager;
+        private readonly AssemblyInspector _assemblyInspector;
 
         [ObservableProperty]
         private List<MemberTypeNode> _properites;
         [ObservableProperty]
         private List<NamespaceNode> _typeDetails;
 
-        public TypesUnitViewModel(IEventHub eventHub, AssemblyManager assemblyManager)
+        public TypesUnitViewModel(IEventHub eventHub, AssemblyInspector assemblyInspector)
         {
             _eventHub = eventHub;
-            _assemblyManager = assemblyManager;
+            _assemblyInspector = assemblyInspector;
         }
 
         public void OnLoaded(IViewable view)
         {
-            _eventHub.Subscribe<CurrentTypePubHandler, CurrentTypePubArgs>(CurrentTypeChanged);
+            _eventHub.Subscribe<CurrentTypeEventHandler, CurrentTypeEventArgs>(CurrentTypeChanged);
         }
 
-        private void CurrentTypeChanged(CurrentTypePubArgs args)
+        private void CurrentTypeChanged(CurrentTypeEventArgs args)
         {
-            TypeDetails = _assemblyManager.CreateHierarchy(args.Assembly);
+            TypeDetails = _assemblyInspector.BuildTypeHierarchy(args.Assembly);
         }
 
         [RelayCommand]
@@ -47,7 +46,7 @@ namespace Reflector.Types.Local.ViewModels
             }
 
             List<MemberNode> allMembers = node.MemberTypes.SelectMany(pair => pair.Members).ToList();
-            Properites = _assemblyManager.CreateHierarchyMemberTypes(allMembers);
+            Properites = _assemblyInspector.BuildMemberTypeHierarchy(allMembers);
         }
     }
 }

@@ -4,29 +4,50 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Xml.Linq;
 
-namespace Reflector.Core.Reflection
+namespace Reflector.Core.Utilities
 {
-    public class AssemblyManager
+    public class AssemblyInspector
     {
-        public List<IGrouping<string, TypeDetails>> ExtractInfo(string assemblyPath)
+        public List<AssemblyModel> LoadAssemblies()
         {
-            // Load the assembly
-            Assembly assembly = Assembly.LoadFile(assemblyPath);
-            return ExtractInfo(assembly);
+            List<AssemblyModel> assemblyModels = new();
+            AssemblyGroupModel allAssembliesGroup = new("All");
+            AssemblyGroupModel systemAssembliesGroup = new("Systems");
+
+            List<Assembly> assemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
+
+            while (assemblies.Any())
+            {
+                Assembly assembly = assemblies.First();
+                assemblies.Remove(assembly);
+
+                allAssembliesGroup.Items.Add(new AssemblyModel(assembly));
+
+                if (assembly.FullName.Contains("System."))
+                {
+                    systemAssembliesGroup.Items.Add(new AssemblyModel(assembly));
+                }
+            }
+
+            assemblyModels.Add(allAssembliesGroup);
+            assemblyModels.Add(systemAssembliesGroup);
+
+            return assemblyModels;
         }
 
-        public List<IGrouping<string, TypeDetails>> ExtractInfo(Assembly assembly)
+        public List<IGrouping<string, TypeDetails>> GatherTypeDetails(string assemblyPath)
         {
+            Assembly assembly = Assembly.LoadFile(assemblyPath);
+            return GatherTypeDetails(assembly);
+        }
 
-            // List to store all information
-            List<TypeDetails> assemblyDetails = new();
+        public List<IGrouping<string, TypeDetails>> GatherTypeDetails(Assembly assembly)
+        {
+            List<TypeDetails> typeDetailsList = new();
 
-            // List all the types (classes, interfaces, enums, etc.)
             foreach (Type type in assembly.GetTypes())
             {
-                // Ignore compiler-generated types
                 if (IsCompilerGenerated(type))
                     continue;
 
@@ -45,36 +66,34 @@ namespace Reflector.Core.Reflection
                     Fields = new List<FieldInfo>(type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static)),
                 };
 
-                assemblyDetails.Add(typeDetails);
+                typeDetailsList.Add(typeDetails);
             }
 
-            // Group by namespace
-            IEnumerable<IGrouping<string, TypeDetails>> namespaceGroups = assemblyDetails.GroupBy(info => info.Namespace);
+            IEnumerable<IGrouping<string, TypeDetails>> namespaceGroups = typeDetailsList.GroupBy(info => info.Namespace);
             return namespaceGroups.ToList();
         }
 
-
-        public List<NamespaceNode> CreateHierarchy(Assembly assembly)
+        public List<NamespaceNode> BuildTypeHierarchy(Assembly assembly)
         {
-            var list = ExtractInfo(assembly);
-            return CreateHierarchy(list);
+            var typeDetailsList = GatherTypeDetails(assembly);
+            return BuildTypeHierarchy(typeDetailsList);
         }
 
-        public List<NamespaceNode> CreateHierarchy(List<IGrouping<string, TypeDetails>> groupedDetails)
+        public List<NamespaceNode> BuildTypeHierarchy(List<IGrouping<string, TypeDetails>> groupedTypeDetails)
         {
-            var namespaces = new List<NamespaceNode>();
+            var namespaceNodes = new List<NamespaceNode>();
 
-            foreach (var group in groupedDetails)
+            foreach (var namespaceGroup in groupedTypeDetails)
             {
-                var namespaceNode = new NamespaceNode { Name = group.Key };
+                var namespaceNode = new NamespaceNode { Name = namespaceGroup.Key };
 
-                foreach (var typeDetails in group)
+                foreach (var typeDetails in namespaceGroup)
                 {
                     var typeNode = new TypeNode { Name = typeDetails.TypeName };
                     typeNode.MemberTypes = new();
 
-                    // Methods
-                    var methods = typeDetails.Methods.Select(m => new MemberNode
+                    // Method nodes
+                    var methodNodes = typeDetails.Methods.Select(m => new MemberNode
                     {
                         Name = m.Name,
                         IsPublic = m.IsPublic,
@@ -85,10 +104,10 @@ namespace Reflector.Core.Reflection
                         Parameters = m.GetParameters().Select(p => p.ToString()).ToList()
                     }).ToList();
 
-                    typeNode.MemberTypes.Add(new MemberTypeIdentifier { Name = "Methods", Members = methods });
+                    typeNode.MemberTypes.Add(new MemberTypeIdentifier { Name = "Methods", Members = methodNodes });
 
-                    // Properties
-                    var properties = typeDetails.Properties.Select(p => new MemberNode
+                    // Property nodes
+                    var propertyNodes = typeDetails.Properties.Select(p => new MemberNode
                     {
                         Name = p.Name,
                         IsPublic = p.GetMethod?.IsPublic ?? false,
@@ -98,10 +117,10 @@ namespace Reflector.Core.Reflection
                         DataType = p.PropertyType.ToString()
                     }).ToList();
 
-                    typeNode.MemberTypes.Add(new MemberTypeIdentifier { Name = "Properties", Members = properties });
+                    typeNode.MemberTypes.Add(new MemberTypeIdentifier { Name = "Properties", Members = propertyNodes });
 
-                    // Fields
-                    var fields = typeDetails.Fields.Select(f => new MemberNode
+                    // Field nodes
+                    var fieldNodes = typeDetails.Fields.Select(f => new MemberNode
                     {
                         Name = f.Name,
                         IsPublic = f.IsPublic,
@@ -111,27 +130,26 @@ namespace Reflector.Core.Reflection
                         DataType = f.FieldType.ToString()
                     }).ToList();
 
-                    typeNode.MemberTypes.Add(new MemberTypeIdentifier { Name = "Fields", Members = fields });
+                    typeNode.MemberTypes.Add(new MemberTypeIdentifier { Name = "Fields", Members = fieldNodes });
 
                     namespaceNode.Items.Add(typeNode);
                 }
 
-                namespaces.Add(namespaceNode);
+                namespaceNodes.Add(namespaceNode);
             }
 
-            return namespaces;
+            return namespaceNodes;
         }
 
-        public List<MemberTypeNode> CreateHierarchyMemberTypes(List<MemberNode> items)
+        public List<MemberTypeNode> BuildMemberTypeHierarchy(List<MemberNode> memberNodes)
         {
-            return items.GroupBy(node => node.MemberType)
+            return memberNodes.GroupBy(node => node.MemberType)
                 .Select(group => new MemberTypeNode(group.Key, group.ToList()))
                 .ToList();
         }
 
         private bool IsCompilerGenerated(Type type)
         {
-            // Check for the CompilerGenerated attribute
             return type.GetCustomAttributes(typeof(CompilerGeneratedAttribute), inherit: false).Any();
         }
     }

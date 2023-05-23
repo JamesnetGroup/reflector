@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Reflector.Data.Arguments
+namespace Reflector.Data.Models
 {
-    public class CurrentTypePubArgs : EventArgs
+    public class CurrentTypeEventArgs : EventArgs
     {
         public Assembly Assembly { get; set; }
 
-        public CurrentTypePubArgs(Assembly assembly)
+        public CurrentTypeEventArgs(Assembly assembly)
         {
             Assembly = assembly;
         }

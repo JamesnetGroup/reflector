@@ -1,10 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using Jamesnet.Wpf.Global.Evemt;
 using Jamesnet.Wpf.Mvvm;
-using Reflector.Core.Reflection;
-using Reflector.Data.Arguments;
-using Reflector.Data.Events;
+using Reflector.Core.Utilities;
 using Reflector.Data.Models;
+using Reflector.Data.Services;
 using System.Collections.Generic;
 
 namespace Reflector.Assemblies.Local.ViewModels
@@ -13,21 +12,21 @@ namespace Reflector.Assemblies.Local.ViewModels
     {
         private readonly IEventHub _eventHub;
 
-        public List<TreeModel> Assemblies { get; init; }
+        public List<AssemblyModel> Assemblies { get; init; }
 
-        public AssemblyUnitViewModel(IEventHub eventHub, ReferenceManager referenceInspector)
+        public AssemblyUnitViewModel(IEventHub eventHub, AssemblyInspector assemblyInspector)
         {
             _eventHub = eventHub;
-            Assemblies = referenceInspector.LoadInfo();
+            Assemblies = assemblyInspector.LoadAssemblies();
         }
 
         [RelayCommand]
-        private void AssemblyClick(TreeModel data)
+        private void AssemblyClick(AssemblyModel data)
         {
             if (data.Assem != null)
             {
-                CurrentTypePubArgs args = new(data.Assem);
-                _eventHub.Publish<CurrentTypePubHandler, CurrentTypePubArgs>(args);                
+                CurrentTypeEventArgs args = new(data.Assem);
+                _eventHub.Publish<CurrentTypeEventHandler, CurrentTypeEventArgs>(args);                
             }
         }
     }
