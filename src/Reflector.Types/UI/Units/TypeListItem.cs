@@ -1,9 +1,10 @@
-﻿using System.Windows;
+﻿using Reflector.LayoutSupport.UI.Units;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace Reflector.Types.UI.Units
 {
-    public class TypeListItem : TreeViewItem
+    public class TypeListItem : JamesTreeViewItem
     {
         static TypeListItem()
         {

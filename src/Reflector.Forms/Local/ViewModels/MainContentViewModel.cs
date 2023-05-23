@@ -1,9 +1,7 @@
-﻿using CommunityToolkit.Mvvm.Input;
-using Jamesnet.Wpf.Controls;
+﻿using Jamesnet.Wpf.Controls;
 using Jamesnet.Wpf.Mvvm;
 using Prism.Ioc;
 using Prism.Regions;
-using System;
 
 namespace Reflector.Forms.Local.ViewModels
 {

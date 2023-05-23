@@ -1,6 +1,5 @@
 ﻿using Jamesnet.Wpf.Controls;
 using System.Windows;
-using System.Windows.Input;
 
 namespace Reflector.Assemblies.UI.Views
 {
