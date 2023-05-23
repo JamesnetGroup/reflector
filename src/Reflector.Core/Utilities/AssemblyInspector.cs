@@ -92,17 +92,25 @@ namespace Reflector.Core.Utilities
                     var typeNode = new TypeNode { Name = typeDetails.TypeName };
                     typeNode.MemberTypes = new();
 
+                    // Get all the getter and setter methods of all properties in the type
+                    var propertyMethods = typeDetails.Properties
+                        .SelectMany(p => new[] { p.GetMethod, p.SetMethod })
+                        .Where(m => m != null)
+                        .ToList();
+
                     // Method nodes
-                    var methodNodes = typeDetails.Methods.Select(m => new MemberNode
-                    {
-                        Name = m.Name,
-                        IsPublic = m.IsPublic,
-                        IsPrivate = m.IsPrivate,
-                        IsStatic = m.IsStatic,
-                        MemberType = "Method",
-                        DataType = m.ReturnType.ToString(),
-                        Parameters = m.GetParameters().Select(p => p.ToString()).ToList()
-                    }).ToList();
+                    var methodNodes = typeDetails.Methods
+                        .Where(m => !propertyMethods.Contains(m)) // Exclude property getters and setters
+                        .Select(m => new MemberNode
+                        {
+                            Name = m.Name,
+                            IsPublic = m.IsPublic,
+                            IsPrivate = m.IsPrivate,
+                            IsStatic = m.IsStatic,
+                            MemberType = "Method",
+                            DataType = m.ReturnType.ToString(),
+                            Parameters = m.GetParameters().Select(p => p.ToString()).ToList()
+                        }).ToList();
 
                     typeNode.MemberTypes.Add(new MemberTypeIdentifier { Name = "Methods", Members = methodNodes });
 
