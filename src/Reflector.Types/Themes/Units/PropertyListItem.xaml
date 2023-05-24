@@ -81,10 +81,11 @@
                             <Border BorderBrush="{TemplateBinding BorderBrush}"
                                     BorderThickness="{TemplateBinding BorderThickness}"
                                     ToolTip="{Binding Name}">
-                                <ctrls:JamesGrid Columns="Auto, Auto, *, Auto" 
+                                <ctrls:JamesGrid Columns="Auto, Auto, Auto, *, Auto" 
                                                  Margin="{Binding RelativeSource={RelativeSource Self}, Converter={cnvts:TreeDepthConverter}}">
                                     <ToggleButton x:Name="extend" Style="{StaticResource ExpandButton}"/>
                                     <based:PathCanvas x:Name="path1" Style="{StaticResource TreeIcon}"/>
+                                    <TextBlock x:Name="static" Text="static" Visibility="Collapsed"/>
                                     <TextBlock Grid.Column="2" Style="{StaticResource Header}" 
                                                TextTrimming="CharacterEllipsis"/>
                                 </ctrls:JamesGrid>
@@ -102,6 +103,9 @@
                         <Trigger Property="HasItems" Value="False">
                             <Setter TargetName="extend" Property="Visibility" Value="Hidden"/>
                         </Trigger>
+                        <DataTrigger Binding="{Binding IsStatic}" Value="True">
+                            <Setter TargetName="static" Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
