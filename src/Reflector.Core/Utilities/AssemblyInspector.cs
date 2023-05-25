@@ -151,6 +151,7 @@ namespace Reflector.Core.Utilities
                         MemberType = "Field",
                         DataType = f.FieldType.ToString(),
                         IsDeclaringType = f.DeclaringType.Equals(typeDetails.Type),
+                        IsBackingField = IsBackingField(f.Name),
                     }).ToList();
 
                     typeNode.MemberTypes.Add(new MemberTypeIdentifier { Name = "Fields", Members = fieldNodes });
@@ -174,6 +175,11 @@ namespace Reflector.Core.Utilities
         private bool IsCompilerGenerated(Type type)
         {
             return type.GetCustomAttributes(typeof(CompilerGeneratedAttribute), inherit: false).Any();
+        }
+
+        private bool IsBackingField(string fieldName)
+        {
+            return fieldName.Contains(">k__BackingField");
         }
     }
 }

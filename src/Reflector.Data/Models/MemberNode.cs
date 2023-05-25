@@ -9,6 +9,7 @@ namespace Reflector.Data.Models
         public bool IsPrivate { get; set; }
         public bool IsStatic { get; set; }
         public bool IsDeclaringType { get; set; }
+        public bool IsBackingField { get; set; }
         public bool IsMemberType { get; set; } 
         public string MemberType { get; set; } // Method, Property, Field
         public string DataType { get; set; } // Return type for methods, data type for fields and properties
