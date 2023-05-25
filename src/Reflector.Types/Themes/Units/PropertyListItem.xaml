@@ -132,6 +132,9 @@
                             <Setter Property="Background" Value="#242424"/>
                             <Setter TargetName="content" Property="ContentTemplate" Value="{StaticResource MemberTypeTemplate}"/>
                         </DataTrigger>
+                        <DataTrigger Binding="{Binding IsDeclaringType}" Value="False">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
