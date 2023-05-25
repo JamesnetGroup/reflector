@@ -103,7 +103,9 @@
                             <Border BorderBrush="{TemplateBinding BorderBrush}"
                                     BorderThickness="{TemplateBinding BorderThickness}"
                                     ToolTip="{Binding Name}">
-                                <ContentPresenter x:Name="content" ContentTemplate="{StaticResource TypeTemplate}" ContentSource="DataContext"/>
+                                <ContentPresenter x:Name="content" 
+                                                  ContentTemplate="{StaticResource TypeTemplate}" 
+                                                  ContentSource="DataContext"/>
                             </Border>
                             <ItemsPresenter Style="{StaticResource ItemsPresenter}"/>
                         </ctrls:JamesGrid>
@@ -112,9 +114,22 @@
                         <Trigger Property="IsSelected" Value="True">
                             <Setter Property="Background" Value="#FF175295"/>
                         </Trigger>
+                        <DataTrigger Binding="{Binding IsInterface}" Value="True">
+                            <Setter Property="Foreground" Value="#B6D39B"/>
+                            <!--<Setter Property="FontStyle" Value="Italic"/>-->
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsObject}" Value="True">
+                            <Setter Property="Foreground" Value="#49b582"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding HasBaseType}" Value="True">
+                            <Setter Property="Foreground" Value="#49b582"/>
+                        </DataTrigger>
                         <DataTrigger Binding="{Binding IsNamespace}" Value="True">
                             <Setter Property="Background" Value="#242424"/>
                             <Setter TargetName="content" Property="ContentTemplate" Value="{StaticResource NamespaceTemplate}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsEnum}" Value="True">
+                            <Setter Property="Foreground" Value="#B6D39B"/>
                         </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

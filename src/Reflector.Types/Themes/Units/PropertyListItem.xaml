@@ -10,7 +10,8 @@
     <Geometry x:Key="MenuDown">M7,10L12,15L17,10H7Z</Geometry>
     <Geometry x:Key="Assembly">M12,14C10.89,14 10,13.1 10,12C10,10.89 10.89,10 12,10C13.11,10 14,10.89 14,12A2,2 0 0,1 12,14M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4Z</Geometry>
     <Geometry x:Key="Object">M18,15H16V17H18M18,11H16V13H18M20,19H12V17H14V15H12V13H14V11H12V9H20M10,7H8V5H10M10,11H8V9H10M10,15H8V13H10M10,19H8V17H10M6,7H4V5H6M6,11H4V9H6M6,15H4V13H6M6,19H4V17H6M12,7V3H2V21H22V7H12Z</Geometry>
-
+    <Geometry x:Key="Member">M23,12L20.56,9.22L20.9,5.54L17.29,4.72L15.4,1.54L12,3L8.6,1.54L6.71,4.72L3.1,5.53L3.44,9.21L1,12L3.44,14.78L3.1,18.47L6.71,19.29L8.6,22.47L12,21L15.4,22.46L17.29,19.28L20.9,18.46L20.56,14.78L23,12M10,17L6,13L7.41,11.59L10,14.17L16.59,7.58L18,9L10,17Z</Geometry>
+    
     <Style TargetType="{x:Type based:PathCanvas}" x:Key="ToggleIcon">
         <Setter Property="Width" Value="16"/>
         <Setter Property="Height" Value="16"/>
@@ -18,28 +19,20 @@
         <Setter Property="Fill" Value="#FFFFFF"/>
     </Style>
 
-    <Style TargetType="{x:Type based:PathCanvas}" x:Key="TreeIcon">
+    <Style TargetType="{x:Type based:PathCanvas}" x:Key="MemberIcon">
         <Setter Property="Grid.Row" Value="0"/>
         <Setter Property="Grid.Column" Value="1"/>
         <Setter Property="Width" Value="14"/>
         <Setter Property="Height" Value="14"/>
         <Setter Property="Margin" Value="0 0 4 0"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="Data" Value="{StaticResource Object}"/>
+        <Setter Property="Visibility" Value="Hidden"/>
+        <Setter Property="Data" Value="{StaticResource Member}"/>
         <Setter Property="Fill" Value="#AAAAAA"/>
     </Style>
 
     <Style TargetType="{x:Type ItemsPresenter}" x:Key="ItemsPresenter">
         <Setter Property="Grid.Row" Value="1"/>
-        <Setter Property="Visibility" Value="Collapsed"/>
-    </Style>
-
-    <Style TargetType="{x:Type TextBlock}" x:Key="Header">
-        <Setter Property="Grid.Row" Value="0"/>
-        <Setter Property="Grid.Column" Value="2"/>
-        <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="Margin" Value="0 0 10 0"/>
-        <Setter Property="Text" Value="{Binding Name}"/>
     </Style>
 
     <Style TargetType="{x:Type ToggleButton}" x:Key="ExpandButton">
@@ -65,6 +58,47 @@
         </Setter>
     </Style>
 
+    <Style TargetType="{x:Type TextBlock}" x:Key="HeaderText">
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Margin" Value="10 0 10 0"/>
+        <!--<Setter Property="FontStyle" Value="Italic"/>-->
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Foreground" Value="#CCCCCC"/>
+        <Setter Property="Text" Value="{Binding Name}"/>
+    </Style>
+
+    <Style TargetType="{x:Type TextBlock}" x:Key="Header">
+        <Setter Property="Grid.Row" Value="0"/>
+        <Setter Property="Grid.Column" Value="2"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0 0 10 0"/>
+        <Setter Property="Text" Value="{Binding Name}"/>
+    </Style>
+
+    <DataTemplate x:Key="MemberTypeTemplate">
+        <ctrls:JamesGrid Columns="Auto, Auto, Auto, *, Auto" Height="24">
+            <TextBlock Grid.Column="2" Style="{StaticResource HeaderText}" 
+                       TextTrimming="CharacterEllipsis"/>
+        </ctrls:JamesGrid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="MemberTemplate">
+        <ctrls:JamesGrid Columns="Auto, Auto, Auto, *, Auto" Height="24">
+            <based:PathCanvas x:Name="member" Style="{StaticResource MemberIcon}"/>
+            <TextBlock x:Name="static" Text="" Visibility="Collapsed"/>
+            <TextBlock Grid.Column="2" Style="{StaticResource Header}" 
+                                               TextTrimming="CharacterEllipsis"/>
+        </ctrls:JamesGrid>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding IsStatic}" Value="True">
+                <Setter TargetName="static" Property="Visibility" Value="Visible"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsDeclaringType}" Value="True">
+                <Setter TargetName="member" Property="Visibility" Value="Visible"/>
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
     <Style TargetType="{x:Type units:PropertyListItem}">
         <Setter Property="Background" Value="#191919"/>
         <Setter Property="Foreground" Value="#FFFFFF"/>
@@ -81,34 +115,26 @@
                             <Border BorderBrush="{TemplateBinding BorderBrush}"
                                     BorderThickness="{TemplateBinding BorderThickness}"
                                     ToolTip="{Binding Name}">
-                                <ctrls:JamesGrid Columns="Auto, Auto, Auto, *, Auto" 
-                                                 Margin="{Binding RelativeSource={RelativeSource Self}, Converter={cnvts:TreeDepthConverter}}">
-                                    <ToggleButton x:Name="extend" Style="{StaticResource ExpandButton}"/>
-                                    <based:PathCanvas x:Name="path1" Style="{StaticResource TreeIcon}"/>
-                                    <TextBlock x:Name="static" Text="static" Visibility="Collapsed"/>
-                                    <TextBlock Grid.Column="2" Style="{StaticResource Header}" 
-                                               TextTrimming="CharacterEllipsis"/>
+                                <ctrls:JamesGrid Columns="Auto, Auto, Auto, *, Auto">
+                                    <ContentPresenter x:Name="content" 
+                                                      ContentTemplate="{StaticResource MemberTemplate}" 
+                                                      ContentSource="DataContext"/>
                                 </ctrls:JamesGrid>
                             </Border>
-                            <ItemsPresenter x:Name="items" Style="{StaticResource ItemsPresenter}"/>
+                            <ItemsPresenter Style="{StaticResource ItemsPresenter}"/>
                         </ctrls:JamesGrid>
                     </Border>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsExpanded" Value="True">
-                            <Setter TargetName="items" Property="Visibility" Value="Visible"/>
-                        </Trigger>
                         <Trigger Property="IsSelected" Value="True">
                             <Setter Property="Background" Value="#FF175295"/>
                         </Trigger>
-                        <Trigger Property="HasItems" Value="False">
-                            <Setter TargetName="extend" Property="Visibility" Value="Hidden"/>
-                        </Trigger>
-                        <DataTrigger Binding="{Binding IsStatic}" Value="True">
-                            <Setter TargetName="static" Property="Visibility" Value="Visible"/>
+                        <DataTrigger Binding="{Binding IsMemberType}" Value="True">
+                            <Setter Property="Background" Value="#242424"/>
+                            <Setter TargetName="content" Property="ContentTemplate" Value="{StaticResource MemberTypeTemplate}"/>
                         </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
-</ResourceDictionary>
+</ResourceDictionary> 

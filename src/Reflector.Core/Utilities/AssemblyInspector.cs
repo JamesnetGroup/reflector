@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Windows.Automation;
+using System.Xml.Linq;
 
 namespace Reflector.Core.Utilities
 {
@@ -53,6 +55,7 @@ namespace Reflector.Core.Utilities
 
                 TypeDetails typeDetails = new()
                 {
+                    Type = type,
                     Namespace = type.Namespace ?? "Global",
                     TypeName = type.Name,
                     IsClass = type.IsClass,
@@ -61,6 +64,9 @@ namespace Reflector.Core.Utilities
                     IsAbstract = type.IsAbstract,
                     IsSealed = type.IsSealed,
                     IsInterface = type.IsInterface,
+                    IsEnum = type.IsEnum,
+                    IsObject = type.BaseType != null && type.BaseType.Name == "Object",
+                    BaseType = type.BaseType,
                     Methods = new List<MethodInfo>(type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static)),
                     Properties = new List<PropertyInfo>(type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static)),
                     Fields = new List<FieldInfo>(type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static)),
@@ -89,8 +95,14 @@ namespace Reflector.Core.Utilities
 
                 foreach (var typeDetails in namespaceGroup)
                 {
-                    var typeNode = new TypeNode { Name = typeDetails.TypeName };
+                    TypeNode typeNode = new();
+                    typeNode.Name = typeDetails.TypeName;
                     typeNode.MemberTypes = new();
+                    typeNode.IsInterface = typeDetails.IsInterface;
+                    typeNode.IsEnum = typeDetails.IsEnum;
+                    typeNode.IsObject = typeDetails.IsObject;
+                    typeNode.HasBaseType = typeDetails.BaseType != null;
+                    
 
                     // Get all the getter and setter methods of all properties in the type
                     var propertyMethods = typeDetails.Properties
@@ -109,6 +121,7 @@ namespace Reflector.Core.Utilities
                             IsStatic = m.IsStatic,
                             MemberType = "Method",
                             DataType = m.ReturnType.ToString(),
+                            IsDeclaringType = m.DeclaringType.Equals(typeDetails.Type),
                             Parameters = m.GetParameters().Select(p => p.ToString()).ToList()
                         }).ToList();
 
@@ -122,7 +135,8 @@ namespace Reflector.Core.Utilities
                         IsPrivate = p.GetMethod?.IsPrivate ?? false,
                         IsStatic = p.GetMethod?.IsStatic ?? false,
                         MemberType = "Property",
-                        DataType = p.PropertyType.ToString()
+                        DataType = p.PropertyType.ToString(),
+                        IsDeclaringType = p.DeclaringType.Equals(typeDetails.Type),
                     }).ToList();
 
                     typeNode.MemberTypes.Add(new MemberTypeIdentifier { Name = "Properties", Members = propertyNodes });
@@ -135,7 +149,8 @@ namespace Reflector.Core.Utilities
                         IsPrivate = f.IsPrivate,
                         IsStatic = f.IsStatic,
                         MemberType = "Field",
-                        DataType = f.FieldType.ToString()
+                        DataType = f.FieldType.ToString(),
+                        IsDeclaringType = f.DeclaringType.Equals(typeDetails.Type),
                     }).ToList();
 
                     typeNode.MemberTypes.Add(new MemberTypeIdentifier { Name = "Fields", Members = fieldNodes });
