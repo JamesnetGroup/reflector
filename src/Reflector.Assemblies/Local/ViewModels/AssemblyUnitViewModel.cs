@@ -5,29 +5,30 @@ using Reflector.Core.Utilities;
 using Reflector.Data.Models;
 using Reflector.Data.Services;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Reflector.Assemblies.Local.ViewModels
 {
-    public partial class AssemblyUnitViewModel : ObservableBase
-    {
-        private readonly IEventHub _eventHub;
+		public partial class AssemblyUnitViewModel : ObservableBase
+		{
+				private readonly IEventHub _eventHub;
 
-        public List<AssemblyModel> Assemblies { get; init; }
+				public List<AssemblyModel> Assemblies { get; init; }
 
-        public AssemblyUnitViewModel(IEventHub eventHub, AssemblyInspector assemblyInspector)
-        {
-            _eventHub = eventHub;
-            Assemblies = assemblyInspector.LoadAssemblies();
-        }
+				public AssemblyUnitViewModel(IEventHub eventHub, AssemblyInspector assemblyInspector)
+				{
+						_eventHub = eventHub;
+						Assemblies = assemblyInspector.LoadAssemblies();
+				}
 
-        [RelayCommand]
-        private void AssemblyClick(AssemblyModel data)
-        {
-            if (data.Assem != null)
-            {
-                CurrentTypeEventArgs args = new(data.Assem);
-                _eventHub.Publish<CurrentTypeEventHandler, CurrentTypeEventArgs>(args);                
-            }
-        }
-    }
+				[RelayCommand]
+				private void AssemblyClick(AssemblyModel data)
+				{
+						if (data.Assem == null)
+								return;
+
+						CurrentTypeEventArgs args = new(data.Assem);
+						_eventHub.Publish<CurrentTypeEventHandler, CurrentTypeEventArgs>(args);
+				}
+		}
 }
