@@ -8,5 +8,10 @@ namespace Reflector.LayoutSupport.UI.Units
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(ModernWindow), new FrameworkPropertyMetadata(typeof(ModernWindow)));
         }
+
+        public ModernWindow()
+        {
+            AllowsTransparency = true;
+        }
     }
 }

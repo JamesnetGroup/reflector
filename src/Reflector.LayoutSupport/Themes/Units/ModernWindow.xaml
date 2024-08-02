@@ -6,19 +6,19 @@
 
     <Style TargetType="{x:Type units:ModernWindow}">
         <Setter Property="Title" Value="Modern Window"/>
-        <Setter Property="Background" Value="#ffffff"/>
+        <Setter Property="Background" Value="#000000"/>
+        <Setter Property="BorderBrush" Value="#000000"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="WindowStyle" Value="None"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type units:ModernWindow}">
                     <Border Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}">
-                        <ctrls:JamesGrid Rows="Auto, *">
-                            <Border Background="#eeeeee" Padding="10">
-                                <TextBlock Text="Window Content"/>
-                            </Border>
-                            <ContentPresenter Grid.Row="1"/>
-                        </ctrls:JamesGrid>
+                        <ScrollViewer VerticalScrollBarVisibility="Hidden">
+                            <ContentPresenter/>
+                        </ScrollViewer>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
