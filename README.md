@@ -1,6 +1,8 @@
 # Reflector
 A practical learning project for experimenting with and applying advanced WPF and .NET technologies
 
+[![English](https://img.shields.io/badge/Language-English-blue.svg)](README.md) [![한국어](https://img.shields.io/badge/Language-한국어-red.svg)](README.ko.md)
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![.NET](https://img.shields.io/badge/.NET-8.0-blue.svg)](https://dotnet.microsoft.com/download)
 [![Stars](https://img.shields.io/github/stars/jamesnet214/reflector.svg)](https://github.com/jamesnet214/reflector/stargazers)
