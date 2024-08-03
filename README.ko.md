@@ -2,8 +2,6 @@
 
 WPF와 .NET의 고급 기술을 실험하고 적용하는 실용적인 학습 프로젝트
 
-
-
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![.NET](https://img.shields.io/badge/.NET-8.0-blue.svg)](https://dotnet.microsoft.com/download)
 [![Stars](https://img.shields.io/github/stars/jamesnet214/reflector.svg)](https://github.com/jamesnet214/reflector/stargazers)
@@ -12,7 +10,6 @@ WPF와 .NET의 고급 기술을 실험하고 적용하는 실용적인 학습 �
 ## 프로젝트 개요
 
 Reflector는 WPF 개발자들이 고급 기술을 실험하고 적용할 수 있는 실습 중심의 프로젝트입니다. 이 프로젝트를 통해 복잡한 WPF 애플리케이션 구조, 동적 어셈블리 분석, 그리고 고급 컨트롤 템플릿 설계 등을 직접 구현하고 심도 있게 학습할 수 있습니다.
-
 
 <img src="https://github.com/user-attachments/assets/6f8ae2c5-dfdd-4118-b228-ebae32df6005" width="49.5%"/>
 <img src="https://github.com/user-attachments/assets/1088c829-a33c-41c1-b912-6ce034779237" width="49.5%"/>
@@ -69,6 +66,12 @@ git clone https://github.com/jamesnet214/reflector.git
 - [x] Visual Studio
 - [x] Visual Studio Code
 - [x] Jetbrains Rider
+
+<img src="https://github.com/user-attachments/assets/af70f422-7057-4e77-a54d-042ee8358d2a" width="33%"/>
+<img src="https://github.com/user-attachments/assets/e4feaa10-a107-4b58-8d13-1d8be620ec62" width="33%"/>
+<img src="https://github.com/user-attachments/assets/5ff487f6-55e4-43e1-9abf-f8d419ee6943" width="33%"/>
+
+
 
 #### 3. 빌드 및 실행
 - [x] Windows 11 권장
