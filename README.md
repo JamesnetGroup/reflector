@@ -59,13 +59,17 @@ Reflector는 WPF 개발자들이 고급 기술을 실험하고 적용할 수 있
 
 ### 설치 및 실행
 
-1. 리포지토리 클론:
-  ```
-  git clone https://github.com/jamesnet214/reflector.git
-  ```
+#### 1. 리포지토리 클론:
+```
+git clone https://github.com/jamesnet214/reflector.git
+```
+#### 2. 솔루션 열기
+- [x] Visual Studio
+- [x] Visual Studio Code
+- [x] Jetbrains Rider
 
-2. Visual Studio에서 솔루션 열기
-3. 빌드 및 실행
+#### 3. 빌드 및 실행
+- [x] Windows 11 권장
 
 ## 사용 방법
 
