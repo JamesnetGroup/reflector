@@ -11,8 +11,8 @@ A practical learning project for experimenting with and applying advanced WPF an
 ## Project Overview
 Reflector is a hands-on project that allows WPF developers to experiment with and apply advanced techniques. Through this project, you can directly implement and gain in-depth understanding of complex WPF application structures, dynamic assembly analysis, and advanced control template design.
 
-<img src="https://github.com/user-attachments/assets/6f8ae2c5-dfdd-4118-b228-ebae32df6005" width="49.5%"/>
-<img src="https://github.com/user-attachments/assets/1088c829-a33c-41c1-b912-6ce034779237" width="49.5%"/>
+<img src="https://github.com/user-attachments/assets/6f8ae2c5-dfdd-4118-b228-ebae32df6005" width="49%"/>
+<img src="https://github.com/user-attachments/assets/1088c829-a33c-41c1-b912-6ce034779237" width="49%"/>
 
 ## Key Technologies and Implementations
 #### 1. Project Structuring and Modularization
@@ -63,9 +63,9 @@ git clone https://github.com/jamesnet214/reflector.git
 - [x] Visual Studio Code
 - [x] Jetbrains Rider
 
-<img src="https://github.com/user-attachments/assets/af70f422-7057-4e77-a54d-042ee8358d2a" width="32.9%"/>
-<img src="https://github.com/user-attachments/assets/e4feaa10-a107-4b58-8d13-1d8be620ec62" width="32.9%"/>
-<img src="https://github.com/user-attachments/assets/5ff487f6-55e4-43e1-9abf-f8d419ee6943" width="32.9%"/>
+<img src="https://github.com/user-attachments/assets/af70f422-7057-4e77-a54d-042ee8358d2a" width="32%"/>
+<img src="https://github.com/user-attachments/assets/e4feaa10-a107-4b58-8d13-1d8be620ec62" width="32%"/>
+<img src="https://github.com/user-attachments/assets/5ff487f6-55e4-43e1-9abf-f8d419ee6943" width="32%"/>
 
 #### 3. Build and Run
 - [x] Windows 11 recommended
